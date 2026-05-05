@@ -40,3 +40,14 @@
 - this is thr problem
 
 - my source of truth is on frontend
+
+# solve thr problem new user lost the data
+- for that we maintain state in backend 
+- we create array and fill the all value is false 
+- also add data inside backend is send by frontend
+- create api to fetch state from backend
+- frontend fetch the sate and update into new clint 
+- now when new user come he assigned to old state
+- but here also one problem one server has accept limited req 
+- so we divide the server 
+- but how to share the state between the two server

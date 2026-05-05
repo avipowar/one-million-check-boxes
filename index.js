@@ -7,6 +7,11 @@ async function main() {
     const app = express();
     const server = http.createServer(app);
     const PORT = process.env.PORT ?? 8000;
+    const CHECKB0X_COUNT = 100
+
+    const state = {
+        checkboxes: new Array(CHECKB0X_COUNT).fill(false)
+    }
 
 
     //socket IO Handler
@@ -20,6 +25,7 @@ async function main() {
             console.log(`[Socket id:${socket.id}]:clint:checkbox:change`, data)
 
             io.emit("server:checkbox:change", data)
+            state.checkboxes[data.index] = data.checked
         })
     })
 
@@ -31,8 +37,12 @@ async function main() {
         res.json({healthy: true})
     })
 
+    app.get("/checkbox", (req, res)=> {
+        res.json({checkboxes: state.checkboxes})
+    })
+
     server.listen(PORT, ()=>{
-        console.log(`server is running on https://localhost:${PORT}`)
+        console.log(`server is running on http://localhost:${PORT}`)
     })
 }
 
