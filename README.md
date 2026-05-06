@@ -66,3 +66,22 @@
 - npm i ioredis => he helps backend to talk valkey server
 - now i create two connection publish / subscribe
 - now i  publish the channel
+- now i subscribe this channel also
+- but here i got new problem when i made new server they not get pervious state
+
+# how to share data to new server 
+
+- my current flow is 
+    - Client → server (socket.on)
+    - Server → publish to Redis
+    - Redis → subscriber receives message
+    - Subscriber → updates server state + emits to clients
+
+    - So state update happens inside subscriber
+
+- now i add state into Valkey/redis server
+    - for that i don't update state inside subscriber 
+    - i update state inside publisher
+    - i check existing state 
+    - if existing state present update the state
+    - otherwise make new state 
