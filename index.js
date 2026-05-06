@@ -37,28 +37,48 @@ async function main() {
 
       // add rate limiting here
 
-      const now = Date.now();
+      // const now = Date.now();
 
-      const userData = rateLimitMap.get(socket.id) || {
-        count: 0,
-        startTime: now,
-      };
+      // const userData = rateLimitMap.get(socket.id) || {
+      //   count: 0,
+      //   startTime: now,
+      // };
 
-      if(now - userData.startTime < window) {
-        userData.count += 1
+      // if(now - userData.startTime < window) {
+      //   userData.count += 1
 
-        if(userData.count < LIMIT) {
-          console.log("Rate limit exceeded:", socket.id)
-          return;
-        }
-      }else{
-        userData.startTime = now;
-        userData.count = 1
+      //   if(userData.count < LIMIT) {
+      //     console.log("Rate limit exceeded:", socket.id)
+      //     return;
+      //   }
+      // }else{
+      //   userData.startTime = now;
+      //   userData.count = 1
+      // }
+
+      // rateLimitMap.set(socket.id, userData)
+
+      //  new method
+      const key = `rate-limit:${socket.id}`;
+      const LIMIT = 3; // 1 second me max 10 request
+
+      const count = await redis.incr(key);
+      // store key and increment count = 1
+
+      if (count === 1) {
+        await redis.expire(key, 1); // 1 second window
       }
 
-      rateLimitMap.set(socket.id, userData)
+      if (count > LIMIT) {
+        console.log("Rate limit exceeded:", socket.id);
 
+        socket.emit("error:rate-limit", {
+          message: "Too many requests, slow down",
+             retryAfter: 1000, // 1 second lock
+        });
 
+        return; // 🚫 yahi block ho jayega
+      }
 
       const existingState = await redis.get(CHECKB0X_STATE_KEY);
 

@@ -17,6 +17,18 @@ h1 {
     text-shadow: 0 0 10px #00ff00;
 }
 
+.error {
+    display: none;
+    background-color: #ff4444;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+
 #container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
