@@ -50,4 +50,19 @@
 - now when new user come he assigned to old state
 - but here also one problem one server has accept limited req 
 - so we divide the server 
-- but how to share the state between the two server
+- but how to share the state between the two server\
+
+- $env:PORT=5000; node index.js this command make new port and run server on that port
+
+# share state between two server using third party broker which is Redis/valkey
+- we create two server 
+- and create redis/valkey server
+- server use valkey two share and access data between each other
+- valkey is database server is store data and send res to any clint 
+
+- we create valkey server inside docker 
+- we create docker file and run valkey sever image 
+- we create redis-connection.js file
+- npm i ioredis => he helps backend to talk valkey server
+- now i create two connection publish / subscribe
+- now i  publish the channel
